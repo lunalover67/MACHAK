@@ -6,7 +6,7 @@ public class Transaction {
 
     private String location;
     private double amount;
-    private long unix_timestamp;
+    private Timestamp timestamp;
 
 
 
@@ -14,10 +14,10 @@ public class Transaction {
 
 
 
-    public Transaction(String location_input, double amount_input, long timestamp_input) {
+    public Transaction(String location_input, double amount_input, Timestamp timestamp_input) {
         location = location_input;
         amount = amount_input;
-        unix_timestamp = timestamp_input;
+        timestamp = timestamp_input;
     }
 
 
@@ -34,17 +34,13 @@ public class Transaction {
         return amount;
     }
 
-    public long getUnix_timestamp() {
-        return unix_timestamp;
-    }
-
 
 
     // -- FUNCTION METHODS
 
 
 
-    public static void appendTransactionToLog(String location_input, double amount_input, long timestamp_input) {
+    public static void appendTransactionToLog(String location_input, double amount_input, Timestamp timestamp_input) {
 
         // read file, get list of transactions
 
