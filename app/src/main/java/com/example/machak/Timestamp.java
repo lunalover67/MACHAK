@@ -1,12 +1,12 @@
 package com.example.machak;
 
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Date;
 import java.util.Map;
 
 public class Timestamp {
 
+    // issue is calendar.get(Calendar.INDEX) <-- used methods are deprecated
     private int minute, hour, day, month, year;
 
     public static final Map<Integer, String> MONTH_DICTIONARY = Map.ofEntries(
@@ -54,6 +54,14 @@ public class Timestamp {
         return String.format("%d %s %d @ %d:%s", day, MONTH_DICTIONARY.get(month), year, hour, formatted_minute);
     }
 
+    // returns 0-11, not 1-12
+    public static int getCurrentMonth() {
+        return Calendar.getInstance().getTime().getMonth();
+    }
+
+    public static int getCurrentYear() {
+        return (1900 + Calendar.getInstance().getTime().getYear());
+    }
 
 }
 
