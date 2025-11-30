@@ -3,15 +3,31 @@ package com.example.machak;
 import android.annotation.SuppressLint;
 
 import java.text.DecimalFormat;
+import java.util.HashMap;
 
 public class Transaction {
 
-    private static final DecimalFormat decimalFormat = new DecimalFormat("#.##");
+    // ----
+
+    public static final HashMap<String, String> TAGS = new HashMap<>();
+
+    static {
+        TAGS.put("BUSF", "Bus Fares");
+        TAGS.put("GROC", "Groceries");
+        TAGS.put("EATS", "Eating Out");
+        TAGS.put("MISC", "Miscellaneous");
+    }
+
+    // ----
+
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
+
 
 
     private String location;
     private double amount;
     private Timestamp timestamp;
+    private String tag;
 
 
 
@@ -19,10 +35,11 @@ public class Transaction {
 
 
 
-    public Transaction(String location_input, double amount_input, Timestamp timestamp_input) {
+    public Transaction(String location_input, double amount_input, Timestamp timestamp_input, String tag_input) {
         location = location_input;
         amount = amount_input;
         timestamp = timestamp_input;
+        tag = tag_input;
     }
 
 
@@ -39,6 +56,10 @@ public class Transaction {
         return amount;
     }
 
+    public String getTag() {
+        return tag;
+    }
+
     @SuppressLint("DefaultLocale")
     public String getSummary() {
 
@@ -51,18 +72,17 @@ public class Transaction {
 
 
 //        return "hiya";
-        return String.format("$%s @ %s [%s]", decimalFormat.format(amount), location, timestamp.getFormattedDate());
+        return String.format("$%s @ %s [%s]", DECIMAL_FORMAT.format(amount), location, timestamp.getFormattedDate()) + tag;
     }
 
     // -- FUNCTION METHODS
 
 
-
-    public static void appendTransactionToLog(String location_input, double amount_input, Timestamp timestamp_input) {
+    public static void appendTransactionToLog(String location_input, double amount_input, Timestamp timestamp_input, String tag_input) {
 
         // read file, get list of transactions
 
-        Transaction new_transaction = new Transaction(location_input, amount_input, timestamp_input);
+        Transaction new_transaction = new Transaction(location_input, amount_input, timestamp_input, tag_input);
 
         // transaction list.append(transaction)
 

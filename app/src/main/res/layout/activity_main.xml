@@ -17,7 +17,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.351"
+        app:layout_constraintVertical_bias="0.29"
         tools:text="@tools:sample/date/ddmmyy" />
 
     <Button
@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/terminal_textview"
-        app:layout_constraintVertical_bias="0.442" />
+        app:layout_constraintVertical_bias="0.549" />
 
     <EditText
         android:id="@+id/locationTest"
@@ -48,7 +48,7 @@
         android:id="@+id/amountTest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="88dp"
+        android:layout_marginBottom="120dp"
         android:ems="10"
         android:hint="amount"
         android:inputType="numberDecimal"
@@ -56,5 +56,43 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinnerTest"
+        android:layout_width="208dp"
+        android:layout_height="67dp"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/amountTest"
+        app:layout_constraintVertical_bias="0.396" />
+
+    <Button
+        android:id="@+id/quickadd_pool"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="POOL"
+        android:onClick="quickAddTransaction"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.17"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintVertical_bias="0.523" />
+
+    <Button
+        android:id="@+id/quickadd_busfare"
+        android:onClick="quickAddTransaction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="113dp"
+        android:layout_marginEnd="64dp"
+        android:text="BUS FARE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.534"
+        app:layout_constraintStart_toEndOf="@+id/quickadd_pool"
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
