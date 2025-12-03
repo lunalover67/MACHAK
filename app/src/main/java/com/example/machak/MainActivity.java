@@ -1,18 +1,29 @@
 package com.example.machak;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.gson.reflect.TypeToken;
 import java.nio.charset.StandardCharsets;
-import android.annotation.SuppressLint;
+
 import android.content.Context;
 import java.lang.reflect.Type;
 import com.google.gson.Gson;
 import java.nio.file.Files;
 import java.util.ArrayList;
+
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.util.Log;
 import android.widget.*;
+
 import java.util.Arrays;
 import java.util.List;
 import java.io.File;
@@ -37,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
     private EditText location_input; // POS (Point Of Sale)
     private EditText amount_input; // How much was spent?
     private Spinner tag_select;
+    private PieChart tag_chart;
+    private ProgressBar spent_bar;
+
 
 
     // -------------- DATASTUFFS --------------
@@ -81,11 +95,13 @@ public class MainActivity extends AppCompatActivity {
         location_input = findViewById(R.id.locationTest);
         amount_input = findViewById(R.id.amountTest);
         tag_select = findViewById(R.id.spinnerTest);
+        tag_chart = findViewById(R.id.tag_chart_test);
+        spent_bar= findViewById(R.id.spent_progress_bar);
 
         // Load data and display it.
 
         loadMonthData();
-        updateTerminalDisplay();
+        updateUI();
 
         // Setup tags display.
 
@@ -189,7 +205,9 @@ public class MainActivity extends AppCompatActivity {
     // ------- UPDATE_TERMINAL_DISPLAY -------
 
 
-    private void updateTerminalDisplay() {
+    private void updateUI() {
+
+        // ====== TERMINAL TEXT =====
 
         // Setup empty string.
 
@@ -205,6 +223,124 @@ public class MainActivity extends AppCompatActivity {
         // Set the text.
 
         terminal_window.setText(text);
+
+
+        // ===== PERCENTAGE BAR =====
+
+
+        double spent = current_month.getSpent();
+        double budget = current_month.getBudget();
+
+// Avoid division by zero
+        int progressPercent = budget > 0 ? (int) ((spent / budget) * 100) : 0;
+
+// Cap at 100%
+        if (progressPercent > 100) progressPercent = 100;
+
+        spent_bar.setProgress(progressPercent);
+
+
+        // todo: add percentage
+
+
+// ===== PIE CHART =====
+
+// Convert HashMap keys to a stable list ONCE
+        // Start with all "official" tags from TAGS
+        List<String> keys = new ArrayList<>(Transaction.TAGS.keySet());
+
+// Add any tags found in the transaction log (e.g. BUSF, POOL)
+        for (Transaction t : current_month.getTransactionLog()) {
+            if (!keys.contains(t.getTag())) {
+                keys.add(t.getTag());     // adds BUSF, POOL, etc. but NOT to spinner
+            }
+        }
+
+
+        double[] sliceAmounts = new double[keys.size() + 2]; // for bus and pool
+        Arrays.fill(sliceAmounts, 0);
+
+// add numerical values
+        for (Transaction transaction : current_month.getTransactionLog()) {
+
+            int index = keys.indexOf(transaction.getTag());
+
+            if (index == -1) {
+
+                Log.e("ERROR", "Tag not found: " + transaction.getTag());
+                continue; // prevents crash
+            }
+
+            sliceAmounts[index] += transaction.getAmount();
+        }
+
+// ---- doing chart
+
+        ArrayList<PieEntry> slices = new ArrayList<>();
+
+        for (int sliceIndex = 0; sliceIndex < keys.size(); sliceIndex++) {
+
+            if (sliceAmounts[sliceIndex] != 0) {
+
+                String key = keys.get(sliceIndex);            // e.g. "GROC"
+                String label = key.equals("BUSF") ? "Bus Fares"
+                        : key.equals("POOL") ? "Pool Admission"
+                        : Transaction.TAGS.containsKey(key) ? Transaction.TAGS.get(key)
+                        : key;
+
+
+                Log.d("bug", label);
+
+                slices.add(new PieEntry(
+                        (float) sliceAmounts[sliceIndex],
+                        label
+                ));
+            }
+        }
+        // Create PieDataSet and set properties
+//
+        PieDataSet dataSet = new PieDataSet(slices, "");
+        dataSet.setColors(ColorTemplate.MATERIAL_COLORS); // Keep the material color palette
+        dataSet.setValueTextColor(Color.BLACK); // Set text color for values (percentages/numbers)
+        dataSet.setValueTextSize(16f); // Set size for value text
+
+        dataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                // Format the value with a dollar sign
+                return String.format("%.0f$", value);
+            }
+        });
+
+        PieData pieData = new PieData(dataSet);
+
+// Set PieData on the chart
+        tag_chart.setData(pieData);
+        tag_chart.notifyDataSetChanged();   // tell the chart the data changed
+        tag_chart.invalidate();
+
+// Chart configurations
+        tag_chart.setDrawHoleEnabled(false); // Disable the center hole (donut chart style)
+        tag_chart.setRotationEnabled(false); // Disable rotation of the pie chart
+        tag_chart.getDescription().setEnabled(false); // Disable description
+// tag_chart.setCenterText("Items"); // Uncomment if you want center text
+// tag_chart.animate(); // Uncomment if you want animation
+
+
+        // Set the Legend to appear on the right
+        Legend legend = tag_chart.getLegend();
+        legend.setOrientation(Legend.LegendOrientation.VERTICAL); // Set vertical orientation
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER); // Align vertically in the center
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT); // Align to the right
+        legend.setDrawInside(false); // Ensure the legend is drawn outside the chart
+        legend.setTextSize(14f); // Set text size for legend
+
+// Optional: Set a custom text color for the legend (category names)
+        legend.setTextColor(Color.BLACK);
+        tag_chart.setDrawEntryLabels(false);
+
+        //TODO: avoid making all visual updates every reload
+
 
     }
 
@@ -270,7 +406,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Update GUI.
 
-        updateTerminalDisplay();
+        updateUI();
 
     }
 
@@ -295,7 +431,7 @@ public class MainActivity extends AppCompatActivity {
         // Rewrite into file, and update terminal.
 
         updateFileContents();
-        updateTerminalDisplay();
+        updateUI();
 
     }
 

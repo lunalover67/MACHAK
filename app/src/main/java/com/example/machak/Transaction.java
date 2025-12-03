@@ -12,7 +12,6 @@ public class Transaction {
     public static final HashMap<String, String> TAGS = new HashMap<>();
 
     static {
-        TAGS.put("BUSF", "Bus Fares");
         TAGS.put("GROC", "Groceries");
         TAGS.put("EATS", "Eating Out");
         TAGS.put("MISC", "Miscellaneous");

@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(files("libs/gson.jar"))
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
 //    implementation("com.google.code.gson:gson:2.13.2")
 

@@ -29,6 +29,7 @@ public class MonthData {
         budget = budget_input;
         month = month_index_input;
         year = year_input;
+        spent = 0;
         transactionLog = new ArrayList<>();
     }
 
@@ -65,6 +66,7 @@ public class MonthData {
 
     public void appendTransaction(Transaction transaction) {
         transactionLog.add(transaction);
+        spent += transaction.getAmount();
     }
 
 }
