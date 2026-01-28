@@ -1,6 +1,7 @@
 package com.example.machak;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -84,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // clear
+//        clearSystemUI();
 
         // Localize data file.
 
@@ -443,4 +447,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    private void clearSystemUI() {
+
+        // [CLARITY] Gets rid of the top status bar.
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        // [CLARITY] Gets rid of the bottom navigation bar.
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
 }    
