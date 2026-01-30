@@ -1,186 +1,291 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:paddingTop="48dp"
-    android:fitsSystemWindows="true"
-    tools:context=".MainActivity">
+    android:background="@color/black">
 
-    <!-- Terminal Section at Top -->
+
+    <!-- Main Content -->
     <LinearLayout
-        android:id="@+id/terminal_container"
-        android:layout_width="0dp"
-        android:layout_height="220dp"
-        android:background="@android:color/white"
-        android:elevation="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="#F5F5F5">
 
-        <TextView
-            android:id="@+id/purchase_log_header"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#E0E0E0"
-            android:fontFamily="monospace"
-            android:padding="8dp"
-            android:text="PURCHASE LOG"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:layout_height="50dp"
+            android:background="#333333"/>
 
-        <ScrollView
-            android:id="@+id/terminal_scroll"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            tools:context=".MainActivity">
 
+            <!-- Month Header Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/month_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/spent_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/vcr"
+                        android:text="JANUARY"
+                        android:textColor="#333333"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <ProgressBar
+                        android:id="@+id/spent_progress_bar"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:layout_marginTop="12dp"
+                        android:max="100"
+                        android:progress="0"
+                        android:progressTint="#4CAF50"
+                        android:progressBackgroundTint="#E0E0E0" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Input Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/input_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/month_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Quick Add Buttons -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingBottom="16dp">
+
+                        <ImageButton
+                            android:id="@+id/quickadd_pool"
+                            android:layout_width="72dp"
+                            android:layout_height="72dp"
+                            android:layout_marginEnd="12dp"
+                            android:background="@android:color/transparent"
+                            android:contentDescription="Pool quick add"
+                            android:onClick="quickAddTransaction"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/swim_unclicked" />
+
+                        <ImageButton
+                            android:id="@+id/quickadd_busfare"
+                            android:layout_width="72dp"
+                            android:layout_height="72dp"
+                            android:background="@android:color/transparent"
+                            android:contentDescription="Bus fare quick add"
+                            android:onClick="quickAddTransaction"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/bus_unclicked" />
+                    </LinearLayout>
+
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#E0E0E0" />
+
+                    <!-- Input Fields -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/amountTest"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:fontFamily="@font/vcr"
+                            android:hint="Amount"
+                            android:inputType="numberDecimal"
+                            android:minHeight="48dp"
+                            android:paddingStart="4dp"
+                            android:paddingEnd="4dp"
+                            android:textSize="18sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="8dp"
+                            android:background="#E0E0E0" />
+
+                        <EditText
+                            android:id="@+id/locationTest"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:background="@android:color/transparent"
+                            android:fontFamily="@font/vcr"
+                            android:hint="Location"
+                            android:inputType="text"
+                            android:minHeight="48dp"
+                            android:paddingStart="4dp"
+                            android:paddingEnd="4dp"
+                            android:textSize="18sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="8dp"
+                            android:background="#E0E0E0" />
+
+                        <Spinner
+                            android:id="@+id/spinnerTest"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="12dp"
+                            android:fontFamily="@font/vcr"
+                            android:paddingStart="4dp"
+                            android:paddingEnd="4dp" />
+                    </LinearLayout>
+
+                    <!-- Submit Button -->
+                    <Button
+                        android:id="@+id/button"
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp"
+                        android:layout_marginTop="16dp"
+                        android:backgroundTint="#4CAF50"
+                        android:fontFamily="@font/vcr"
+                        android:onClick="submitTransaction"
+                        android:text="SUBMIT"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        app:cornerRadius="8dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Pie Chart -->
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/tag_chart_test"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/input_card" />
+
+            <!-- Hidden TextView for MainActivity compatibility -->
+            <TextView
+                android:id="@+id/terminal_textview"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <!-- Swipeable Purchase Log Drawer -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:paddingTop="50dp"
+        android:background="#333333">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- Drawer Header -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#333333"
                 android:orientation="vertical"
-                android:padding="12dp">
+                android:padding="16dp">
+
 
                 <TextView
-                    android:id="@+id/terminal_textview"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="monospace"
-                    android:text="TERMINAL"
-                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/vcr"
+                    android:text="FULL PURCHASE LOG"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/drawer_month_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/vcr"
+                    android:text="January 2026"
+                    android:textColor="#AAAAAA"
                     android:textSize="14sp" />
             </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
 
-    <!-- Input Fields Section - All in one row: amount, location, tag -->
-    <EditText
-        android:id="@+id/amountTest"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:hint="amount"
-        android:inputType="numberDecimal"
-        android:minHeight="48dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        app:layout_constraintEnd_toStartOf="@id/locationTest"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/terminal_container"
-        app:layout_constraintWidth_percent="0.3" />
+            <!-- Full Purchase Log ScrollView -->
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="#FAFAFA">
 
-    <EditText
-        android:id="@+id/locationTest"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:hint="location"
-        android:inputType="text"
-        android:minHeight="48dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        app:layout_constraintEnd_toStartOf="@+id/spinnerTest"
-        app:layout_constraintStart_toEndOf="@id/amountTest"
-        app:layout_constraintTop_toTopOf="@id/amountTest"
-        app:layout_constraintWidth_percent="0.35" />
+                <TextView
+                    android:id="@+id/drawer_terminal_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/vcr"
+                    android:padding="16dp"
+                    android:text="No purchases yet"
+                    android:textColor="#333333"
+                    android:textSize="12sp" />
+            </ScrollView>
 
-    <Spinner
-        android:id="@+id/spinnerTest"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/locationTest"
-        app:layout_constraintTop_toTopOf="@id/amountTest"
-        app:layout_constraintWidth_percent="0.27" />
+            <!-- Close Button -->
+           </LinearLayout>
 
-    <!-- Action Buttons Row with Submit -->
-    <LinearLayout
-        android:id="@+id/action_buttons_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="start"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/amountTest">
+    </com.google.android.material.navigation.NavigationView>
 
-        <ImageButton
-            android:id="@+id/quickadd_pool"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginEnd="8dp"
-            android:onClick="quickAddTransaction"
-            android:src="@drawable/swim_unclicked"
-            android:scaleType="fitCenter"
-            android:contentDescription="Pool quick add"
-            android:background="?attr/selectableItemBackground" />
-
-        <ImageButton
-            android:id="@+id/quickadd_busfare"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginEnd="12dp"
-            android:onClick="quickAddTransaction"
-            android:src="@drawable/bus_unclicked"
-            android:scaleType="fitCenter"
-            android:contentDescription="Bus fare quick add"
-            android:background="?attr/selectableItemBackground" />
-
-        <!-- Submit Button -->
-        <Button
-            android:id="@+id/button"
-            android:layout_width="0dp"
-            android:layout_height="64dp"
-            android:layout_weight="1"
-            android:onClick="submitTransaction"
-            android:text="SUBMIT" />
-    </LinearLayout>
-
-    <!-- SPENT Label -->
-    <TextView
-        android:id="@+id/spent_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="___MONTH___"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/action_buttons_layout" />
-
-    <!-- Progress Bar -->
-    <ProgressBar
-        android:id="@+id/spent_progress_bar"
-        style="@android:style/Widget.ProgressBar.Horizontal"
-        android:layout_width="0dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@color/white"
-        android:max="100"
-        android:progress="0"
-        android:progressBackgroundTint="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spent_label" />
-
-    <!-- Pie Chart at Bottom -->
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/tag_chart_test"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spent_progress_bar" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -1,7 +1,12 @@
 package com.example.machak;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -10,7 +15,10 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.material.navigation.NavigationView;
 import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 
 import android.content.Context;
@@ -52,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
     private PieChart tag_chart;
     private ProgressBar spent_bar;
 
+    // Drawer views
+    private DrawerLayout drawerLayout;
+    private TextView drawerTerminalView;
+    private Button closeDrawerButton;
 
 
     // -------------- DATASTUFFS --------------
@@ -86,8 +98,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         // clear
-//        clearSystemUI();
+        clearSystemUI();
 
         // Localize data file.
 
@@ -101,6 +115,41 @@ public class MainActivity extends AppCompatActivity {
         tag_select = findViewById(R.id.spinnerTest);
         tag_chart = findViewById(R.id.tag_chart_test);
         spent_bar= findViewById(R.id.spent_progress_bar);
+
+        // Setup drawer
+        drawerLayout = findViewById(R.id.drawer_layout);
+        drawerTerminalView = findViewById(R.id.drawer_terminal_textview);
+
+        // Setup close drawer button
+//        closeDrawerButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                drawerLayout.closeDrawers();
+//            }
+//        });
+
+
+        ViewCompat.setOnApplyWindowInsetsListener(drawerLayout, (v, insets) -> {
+            Insets systemGestures = insets.getInsets(WindowInsetsCompat.Type.systemGestures());
+
+            v.setPadding(
+                    systemGestures.left,
+                    0,
+                    0,
+                    0
+            );
+
+            return insets;
+        });
+
+        try {
+            Field edgeSizeField = DrawerLayout.class.getDeclaredField("mEdgeSize");
+            edgeSizeField.setAccessible(true);
+
+            int edgeSize = edgeSizeField.getInt(drawerLayout);
+            edgeSizeField.setInt(drawerLayout, edgeSize * 40);
+
+        } catch (Exception ignored) {}
 
         // Load data and display it.
 
@@ -182,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
 
         catch (Exception e) {
             terminal_window.setText("[FAILED TO LOAD]"); // i mean what else am i to do?
+            drawerTerminalView.setText("[FAILED TO LOAD]");
         }
     }
 
@@ -206,6 +256,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    // ------- UPDATE_TERMINAL_VIEWS -------
+
+
+    private void updateTerminalViews() {
+        // Build the string with all the transactions.
+        String text = "";
+        for (Transaction transaction : current_month.getTransactionLog()) {
+            text += transaction.getSummary() + "\n\n";
+        }
+
+        // Update both terminal views
+        terminal_window.setText(text.isEmpty() ? "" : text);
+        drawerTerminalView.setText(text.isEmpty() ? "No purchases yet" : text);
+    }
+
+
     // ------- UPDATE_TERMINAL_DISPLAY -------
 
 
@@ -213,20 +279,7 @@ public class MainActivity extends AppCompatActivity {
 
         // ====== TERMINAL TEXT =====
 
-        // Setup empty string.
-
-        String text = "";
-
-        // Build the string with all the transactions.
-
-        for (Transaction transaction : current_month.getTransactionLog()) {
-
-            text += transaction.getSummary() + "\n\n";
-        }
-
-        // Set the text.
-
-        terminal_window.setText(text);
+        updateTerminalViews();
 
 
         // ===== PERCENTAGE BAR =====
@@ -327,6 +380,8 @@ public class MainActivity extends AppCompatActivity {
         tag_chart.setDrawHoleEnabled(false); // Disable the center hole (donut chart style)
         tag_chart.setRotationEnabled(false); // Disable rotation of the pie chart
         tag_chart.getDescription().setEnabled(false); // Disable description
+        tag_chart.setTouchEnabled(false);
+
 // tag_chart.setCenterText("Items"); // Uncomment if you want center text
 // tag_chart.animate(); // Uncomment if you want animation
 
@@ -462,4 +517,4 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
-}    
+}
