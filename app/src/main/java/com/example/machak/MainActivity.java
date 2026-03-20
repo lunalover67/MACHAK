@@ -1,6 +1,7 @@
 package com.example.machak;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private Spinner tag_select;
     private PieChart tag_chart;
     private ProgressBar spent_bar;
+    private TextView spent_amount_label;
 
     // Drawer views
     private DrawerLayout drawerLayout;
@@ -102,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
 
         // Clear bottom navigation bar
 
@@ -123,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
         drawerTerminalView = findViewById(R.id.drawer_terminal_textview);
         spent_label = findViewById(R.id.spent_label);
         drawer_month_label = findViewById(R.id.drawer_month_label);
+        spent_amount_label = findViewById(R.id.spent_amount_label);
+
 
         // Load data and display it.
 
@@ -331,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
 
         spent_bar.setProgress(progressPercent);
 
-
+        spent_amount_label.setText(String.format("$%.2f / $%.2f", spent, budget).replace(",", "."));
         // todo: add percentage
 
 
@@ -550,7 +556,10 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+
+
     }
 
     private void updateMonthLabels() {

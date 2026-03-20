@@ -5,8 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black">
-
+    android:background="#F5F5F5">
 
     <!-- Main Content -->
     <LinearLayout
@@ -15,26 +14,40 @@
         android:background="#F5F5F5"
         android:orientation="vertical">
 
+        <!-- Top bar -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="#333333" />
+            android:background="#222222"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/vcr"
+                android:text="MACHAK"
+                android:textColor="#F5F5F5"
+                android:textSize="16sp"
+                android:letterSpacing="0.15" />
+        </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="16dp"
+            android:padding="12dp"
             tools:context=".MainActivity">
 
             <!-- Month Header Card -->
-            <androidx.cardview.widget.CardView
+            <LinearLayout
                 android:id="@+id/month_card"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
+                android:layout_marginTop="8dp"
+                android:background="#222222"
+                android:padding="1dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -42,41 +55,64 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="#FFFFFF"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/vcr"
+                        android:text="ON THE CLOCK"
+                        android:textColor="#888888"
+                        android:textSize="11sp"
+                        android:letterSpacing="0.08" />
 
                     <TextView
                         android:id="@+id/spent_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
                         android:fontFamily="@font/vcr"
-                        android:text="JAN 18 - FEB 18"
-                        android:textColor="#333333"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:text="MAR 18 – APR 18"
+                        android:textColor="#111111"
+                        android:textSize="26sp"
+                        android:layout_marginTop="6dp" />
+
+                    <TextView
+                        android:id="@+id/spent_amount_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/vcr"
+                        android:text="$0.00 / $500.00"
+                        android:textColor="#888888"
+                        android:textSize="12sp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="10dp" />
 
                     <ProgressBar
                         android:id="@+id/spent_progress_bar"
                         style="@android:style/Widget.ProgressBar.Horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="32dp"
-                        android:layout_marginTop="12dp"
+                        android:layout_height="12dp"
                         android:max="100"
                         android:progress="0"
                         android:progressBackgroundTint="#E0E0E0"
-                        android:progressTint="#4CAF50" />
+                        android:progressTint="#222222" />
+
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </LinearLayout>
 
             <!-- Input Card -->
-            <androidx.cardview.widget.CardView
+            <LinearLayout
                 android:id="@+id/input_card"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
+                android:layout_marginTop="8dp"
+                android:background="#222222"
+                android:padding="1dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/month_card">
@@ -84,129 +120,266 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="#FFFFFF"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp">
+
+                    <!-- Card title -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/vcr"
+                        android:text="ADD TRANSACTION"
+                        android:textColor="#888888"
+                        android:textSize="11sp"
+                        android:letterSpacing="0.08"
+                        android:layout_marginBottom="10dp" />
+
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#DDDDDD"
+                        android:layout_marginBottom="10dp" />
 
                     <!-- Quick Add Buttons -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:orientation="horizontal"
-                        android:paddingBottom="16dp">
+                        android:layout_marginBottom="10dp">
 
-                        <ImageButton
-                            android:id="@+id/quickadd_pool"
-                            android:layout_width="72dp"
-                            android:layout_height="72dp"
-                            android:layout_marginEnd="12dp"
-                            android:background="@android:color/transparent"
-                            android:contentDescription="Pool quick add"
-                            android:onClick="quickAddTransaction"
-                            android:scaleType="fitCenter"
-                            android:src="@drawable/swim_unclicked" />
+                        <!-- BUS button with border wrapper -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="4dp"
+                            android:background="#222222"
+                            android:padding="1dp">
 
-                        <ImageButton
-                            android:id="@+id/quickadd_busfare"
-                            android:layout_width="72dp"
-                            android:layout_height="72dp"
-                            android:background="@android:color/transparent"
-                            android:contentDescription="Bus fare quick add"
-                            android:onClick="quickAddTransaction"
-                            android:scaleType="fitCenter"
-                            android:src="@drawable/bus_unclicked" />
+                            <Button
+                                android:id="@+id/quickadd_busfare"
+                                android:layout_width="match_parent"
+                                android:layout_height="46dp"
+                                android:backgroundTint="#FFFFFF"
+                                android:fontFamily="@font/vcr"
+                                android:onClick="quickAddTransaction"
+                                android:text="BUS $4.00"
+                                android:textColor="#555555"
+                                android:textSize="13sp"
+                                app:cornerRadius="0dp" />
+                        </LinearLayout>
+
+                        <!-- POOL button with border wrapper -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="4dp"
+                            android:background="#222222"
+                            android:padding="1dp">
+
+                            <Button
+                                android:id="@+id/quickadd_pool"
+                                android:layout_width="match_parent"
+                                android:layout_height="46dp"
+                                android:backgroundTint="#FFFFFF"
+                                android:fontFamily="@font/vcr"
+                                android:onClick="quickAddTransaction"
+                                android:text="POOL $4.58"
+                                android:textColor="#555555"
+                                android:textSize="13sp"
+                                app:cornerRadius="0dp" />
+                        </LinearLayout>
                     </LinearLayout>
 
                     <!-- Divider -->
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#E0E0E0" />
+                        android:background="#DDDDDD"
+                        android:layout_marginBottom="10dp" />
 
-                    <!-- Input Fields -->
+                    <!-- Amount Field -->
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:orientation="vertical">
+                        android:layout_height="50dp"
+                        android:orientation="horizontal"
+                        android:background="#FFFFFF"
+                        android:layout_marginBottom="4dp">
+
+                        <TextView
+                            android:layout_width="56dp"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/vcr"
+                            android:text="AMT"
+                            android:textColor="#888888"
+                            android:textSize="13sp"
+                            android:gravity="center_vertical|end"
+                            android:paddingEnd="8dp" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="#BBBBBB" />
 
                         <EditText
                             android:id="@+id/amountTest"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
                             android:background="@android:color/transparent"
                             android:fontFamily="@font/vcr"
-                            android:hint="Amount"
+                            android:hint="0.00"
                             android:inputType="numberDecimal"
-                            android:minHeight="48dp"
-                            android:paddingStart="4dp"
-                            android:paddingEnd="4dp"
-                            android:textSize="18sp" />
+                            android:paddingStart="8dp"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#BBBBBB"
+                        android:layout_marginBottom="4dp" />
+
+                    <!-- Location Field -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:orientation="horizontal"
+                        android:background="#FFFFFF"
+                        android:layout_marginBottom="4dp">
+
+                        <TextView
+                            android:layout_width="56dp"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/vcr"
+                            android:text="LOC"
+                            android:textColor="#888888"
+                            android:textSize="13sp"
+                            android:gravity="center_vertical|end"
+                            android:paddingEnd="8dp" />
 
                         <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="8dp"
-                            android:background="#E0E0E0" />
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="#BBBBBB" />
 
                         <EditText
                             android:id="@+id/locationTest"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
                             android:background="@android:color/transparent"
                             android:fontFamily="@font/vcr"
                             android:hint="Location"
                             android:inputType="text"
-                            android:minHeight="48dp"
-                            android:paddingStart="4dp"
-                            android:paddingEnd="4dp"
-                            android:textSize="18sp" />
+                            android:paddingStart="8dp"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#BBBBBB"
+                        android:layout_marginBottom="4dp" />
+
+                    <!-- Tag Field -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:orientation="horizontal"
+                        android:background="#FFFFFF"
+                        android:layout_marginBottom="4dp">
+
+                        <TextView
+                            android:layout_width="56dp"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/vcr"
+                            android:text="TAG"
+                            android:textColor="#888888"
+                            android:textSize="13sp"
+                            android:gravity="center_vertical|end"
+                            android:paddingEnd="8dp" />
 
                         <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="8dp"
-                            android:background="#E0E0E0" />
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="#BBBBBB" />
 
                         <Spinner
                             android:id="@+id/spinnerTest"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:layout_marginTop="12dp"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@android:color/transparent"
                             android:fontFamily="@font/vcr"
-                            android:paddingStart="4dp"
-                            android:paddingEnd="4dp" />
+                            android:paddingStart="8dp" />
                     </LinearLayout>
 
-                    <!-- Submit Button -->
-                    <Button
-                        android:id="@+id/button"
+                    <View
                         android:layout_width="match_parent"
-                        android:layout_height="64dp"
-                        android:layout_marginTop="16dp"
-                        android:backgroundTint="#4CAF50"
-                        android:fontFamily="@font/vcr"
-                        android:onClick="submitTransaction"
-                        android:text="SUBMIT"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        app:cornerRadius="8dp" />
+                        android:layout_height="1dp"
+                        android:background="#BBBBBB"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Submit Button -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#222222"
+                        android:padding="1dp">
+
+                        <Button
+                            android:id="@+id/button"
+                            android:layout_width="match_parent"
+                            android:layout_height="54dp"
+                            android:backgroundTint="#222222"
+                            android:fontFamily="@font/vcr"
+                            android:onClick="submitTransaction"
+                            android:text="SUBMIT"
+                            android:textColor="#FFFFFF"
+                            android:textSize="15sp"
+                            app:cornerRadius="0dp" />
+                    </LinearLayout>
+
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </LinearLayout>
 
             <!-- Pie Chart -->
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/tag_chart_test"
+            <!-- Pie Chart -->
+            <LinearLayout
+                android:id="@+id/chart_card"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="#222222"
+                android:padding="1dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/input_card" />
+                app:layout_constraintTop_toBottomOf="@id/input_card">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#FFFFFF"
+                    android:padding="12dp">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/tag_chart_test"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#FFFFFF" />
+
+                </LinearLayout>
+
+            </LinearLayout>
             <!-- Hidden TextView for MainActivity compatibility -->
             <TextView
                 android:id="@+id/terminal_textview"
@@ -228,7 +401,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#333333"
+        android:background="#222222"
         android:paddingTop="50dp">
 
         <LinearLayout
@@ -240,10 +413,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#333333"
+                android:background="#222222"
                 android:orientation="vertical"
                 android:padding="16dp">
-
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -251,18 +423,19 @@
                     android:fontFamily="@font/vcr"
                     android:text="PURCHASE LOG"
                     android:textColor="#FFFFFF"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textSize="24sp"
+                    android:layout_marginBottom="3dp"
+                    android:letterSpacing="0.1" />
 
                 <TextView
                     android:id="@+id/drawer_month_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:fontFamily="@font/vcr"
-                    android:text="January 2026"
+                    android:text="Month"
                     android:textColor="#AAAAAA"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <!-- Full Purchase Log ScrollView -->
@@ -282,6 +455,7 @@
                     android:textColor="#333333"
                     android:textSize="18sp" />
             </ScrollView>
+
         </LinearLayout>
 
     </com.google.android.material.navigation.NavigationView>

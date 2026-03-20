@@ -10,7 +10,9 @@
         android:label="Machak"
         android:roundIcon="@drawable/machak_circle"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MACHAK">
+        android:forceDarkAllowed="false"
+        android:theme="@style/Theme.MACHAK"
+        tools:targetApi="29">
         <activity
             android:name=".MainActivity"
             android:exported="true">
