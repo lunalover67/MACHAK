@@ -19,7 +19,7 @@ public class Transaction {
 
     // ________________________ CLASS_VARS ________________________
 
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
+    public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
 
 
     // ______________________ INSTANCE_VARS ______________________
@@ -56,6 +56,10 @@ public class Transaction {
 
     public String getTag() {
         return tag;
+    }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
     @SuppressLint("DefaultLocale")

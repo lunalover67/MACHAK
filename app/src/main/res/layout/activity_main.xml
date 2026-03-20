@@ -12,13 +12,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#F5F5F5">
+        android:background="#F5F5F5"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="#333333"/>
+            android:background="#333333" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/main"
@@ -51,7 +51,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/vcr"
-                        android:text="JANUARY"
+                        android:text="JAN 18 - FEB 18"
                         android:textColor="#333333"
                         android:textSize="24sp"
                         android:textStyle="bold" />
@@ -64,8 +64,8 @@
                         android:layout_marginTop="12dp"
                         android:max="100"
                         android:progress="0"
-                        android:progressTint="#4CAF50"
-                        android:progressBackgroundTint="#E0E0E0" />
+                        android:progressBackgroundTint="#E0E0E0"
+                        android:progressTint="#4CAF50" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -228,8 +228,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:paddingTop="50dp"
-        android:background="#333333">
+        android:background="#333333"
+        android:paddingTop="50dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -249,7 +249,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/vcr"
-                    android:text="FULL PURCHASE LOG"
+                    android:text="PURCHASE LOG"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -258,7 +258,7 @@
                     android:id="@+id/drawer_month_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="8dp"
                     android:fontFamily="@font/vcr"
                     android:text="January 2026"
                     android:textColor="#AAAAAA"
@@ -280,11 +280,9 @@
                     android:padding="16dp"
                     android:text="No purchases yet"
                     android:textColor="#333333"
-                    android:textSize="12sp" />
+                    android:textSize="18sp" />
             </ScrollView>
-
-            <!-- Close Button -->
-           </LinearLayout>
+        </LinearLayout>
 
     </com.google.android.material.navigation.NavigationView>
 

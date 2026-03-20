@@ -37,6 +37,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.io.File;
 
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
+
 
 /*
  main activity will have
@@ -64,7 +68,8 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private TextView drawerTerminalView;
     private Button closeDrawerButton;
-
+    private TextView spent_label;
+    private TextView drawer_month_label;
 
     // -------------- DATASTUFFS --------------
 
@@ -98,9 +103,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Clear bottom navigation bar
 
-
-        // clear
         clearSystemUI();
 
         // Localize data file.
@@ -115,41 +119,10 @@ public class MainActivity extends AppCompatActivity {
         tag_select = findViewById(R.id.spinnerTest);
         tag_chart = findViewById(R.id.tag_chart_test);
         spent_bar= findViewById(R.id.spent_progress_bar);
-
-        // Setup drawer
         drawerLayout = findViewById(R.id.drawer_layout);
         drawerTerminalView = findViewById(R.id.drawer_terminal_textview);
-
-        // Setup close drawer button
-//        closeDrawerButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                drawerLayout.closeDrawers();
-//            }
-//        });
-
-
-        ViewCompat.setOnApplyWindowInsetsListener(drawerLayout, (v, insets) -> {
-            Insets systemGestures = insets.getInsets(WindowInsetsCompat.Type.systemGestures());
-
-            v.setPadding(
-                    systemGestures.left,
-                    0,
-                    0,
-                    0
-            );
-
-            return insets;
-        });
-
-        try {
-            Field edgeSizeField = DrawerLayout.class.getDeclaredField("mEdgeSize");
-            edgeSizeField.setAccessible(true);
-
-            int edgeSize = edgeSizeField.getInt(drawerLayout);
-            edgeSizeField.setInt(drawerLayout, edgeSize * 40);
-
-        } catch (Exception ignored) {}
+        spent_label = findViewById(R.id.spent_label);
+        drawer_month_label = findViewById(R.id.drawer_month_label);
 
         // Load data and display it.
 
@@ -190,18 +163,28 @@ public class MainActivity extends AppCompatActivity {
 
                 current_month = month_list.get(month_list.size() - 1); // [NOTE]: getLast() may be depreciated, using manual approach.
 
-                // Check if it is a new month.
+                // Check if it is a new month. TODO change this to 18th
 
-                if (current_month.getMonth() != Timestamp.getCurrentMonth() && current_month.getYear() != Timestamp.getCurrentYear()) {
+                int expectedMonth;
+
+                if (Timestamp.getCurrentDay() >= 18) {
+                    // We're past the 18th, so the active billing period is the current calendar month
+                    expectedMonth = Timestamp.getCurrentMonth();
+                }
+                else {
+                    // We're before the 18th, so the active billing period is still last month
+                    // (+ 11) % 12 safely wraps backwards e.g. January (0) → December (11)
+                    expectedMonth = (Timestamp.getCurrentMonth() + 11) % 12;
+                }
+
+                if (current_month.getMonth() != expectedMonth || current_month.getYear() != Timestamp.getCurrentYear()) {
 
                     // If it is, make a new MonthData object.
-
                     current_month = new MonthData();
 
                     // Set as current month.
-
                     month_list.add(current_month);
-
+                    updateFileContents();
                 }
             }
 
@@ -225,6 +208,9 @@ public class MainActivity extends AppCompatActivity {
 
                 updateFileContents();
             }
+
+
+
         }
 
         // If the file can't be read for whatever reason :/ idk shouldnt happen really
@@ -260,15 +246,64 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void updateTerminalViews() {
-        // Build the string with all the transactions.
-        String text = "";
-        for (Transaction transaction : current_month.getTransactionLog()) {
-            text += transaction.getSummary() + "\n\n";
+
+        ArrayList<Transaction> log = current_month.getTransactionLog();
+
+        if (log.isEmpty()) {
+            terminal_window.setText("");
+            drawerTerminalView.setText("No purchases yet");
+            return;
         }
 
-        // Update both terminal views
-        terminal_window.setText(text.isEmpty() ? "" : text);
-        drawerTerminalView.setText(text.isEmpty() ? "No purchases yet" : text);
+        // Group transactions by day (most recent first)
+        // Since transactions are appended in order, we iterate in reverse
+        LinkedHashMap<String, ArrayList<Transaction>> byDay = new LinkedHashMap<>();
+
+        for (int i = log.size() - 1; i >= 0; i--) {
+            Transaction t = log.get(i);
+            Timestamp ts = t.getTimestamp();
+
+            // Build key like "MAR 20" using the 3-letter month abbreviation
+            String monthAbbr = Timestamp.MONTH_DICTIONARY.get(ts.getMonth()).substring(0, 3);
+            String key = monthAbbr + " " + ts.getDay();
+
+            if (!byDay.containsKey(key)) {
+                byDay.put(key, new ArrayList<>());
+            }
+            byDay.get(key).add(t);
+        }
+
+        // Build the display string
+        StringBuilder sb = new StringBuilder();
+
+        for (Map.Entry<String, ArrayList<Transaction>> entry : byDay.entrySet()) {
+            String dayLabel = entry.getKey();
+            ArrayList<Transaction> dayTransactions = entry.getValue();
+
+            // Header: "MAR 20 ──────────────────────"
+            sb.append(String.format("%-6s ────────────────\n", dayLabel));
+
+            // Transactions + daily total
+            double dayTotal = 0;
+            for (Transaction t : dayTransactions) {
+                dayTotal += t.getAmount();
+                sb.append(String.format("  %-12s %-4s %6s\n",
+                        t.getLocation(),
+                        t.getTag(),
+                        String.format("$%.2f", t.getAmount())));
+            }
+
+// Footer — build the right side first, then pad to match line width
+            String totalStr = String.format("$%.2f", dayTotal);
+            String footer = "───[" + totalStr + "]";
+            int lineWidth = 26;
+            sb.append(String.format("%" + lineWidth + "s\n", footer));
+            sb.append("\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n\n");
+        }
+
+        String text = sb.toString();
+        terminal_window.setText(text);
+        drawerTerminalView.setText(text);
     }
 
 
@@ -280,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
         // ====== TERMINAL TEXT =====
 
         updateTerminalViews();
-
+        updateMonthLabels();
 
         // ===== PERCENTAGE BAR =====
 
@@ -517,4 +552,27 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
+
+    private void updateMonthLabels() {
+
+        int month = current_month.getMonth() + 1; // 0-11
+        int year = current_month.getYear();
+
+        // Billing period: prev month 18 → current month 18
+        String prevMonthAbbr = Timestamp.MONTH_DICTIONARY.get((month + 11) % 12).substring(0, 3);
+        String currMonthAbbr = Timestamp.MONTH_DICTIONARY.get(month).substring(0, 3);
+
+        // e.g. "FEB 18 - MAR 18"
+        spent_label.setText(String.format("%s 18 - %s 18", prevMonthAbbr, currMonthAbbr));
+
+        // e.g. "March 2026"
+        String fullMonthName = String.valueOf(Timestamp.MONTH_DICTIONARY.get(Timestamp.getCurrentMonth()).charAt(0))
+                + Timestamp.MONTH_DICTIONARY.get(Timestamp.getCurrentMonth()).substring(1).toLowerCase();
+
+        drawer_month_label.setText(String.format("%d %s %d", Timestamp.getCurrentDay(), fullMonthName, year));
+
+//        Log.d("debug", "month=" + current_month.getMonth() + " year=" + current_month.getYear());
+
+    }
+
 }

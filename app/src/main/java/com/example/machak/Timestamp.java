@@ -65,14 +65,25 @@ public class Timestamp {
 
     // [NOTE] Returns 0-11, not 1-12.
     public static int getCurrentMonth() {
-        return Calendar.getInstance().getTime().getMonth();
+        return Calendar.getInstance().get(Calendar.MONTH); // 0-11, reliable
     }
-
 
     public static int getCurrentYear() {
-        return (1900 + Calendar.getInstance().getTime().getYear());
+        return Calendar.getInstance().get(Calendar.YEAR);
     }
 
+    public static int getCurrentDay() {
+        return Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    // [NOTE] Returns 0-11, not 1-12.
+    public int getMonth() {
+        return month;
+    }
 
     public String toString() {
 
