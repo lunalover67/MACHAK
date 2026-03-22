@@ -27,5 +27,5 @@ just an app to keep track of finances with budget
 - removing false transactions (maybe accident)
 - viewing previous months (if anything is gonna get added soon its this)
 
-### inspiration
+## inspiration
 idk where my money was going and i was kinda pissed that id spend a lot on impulse buys — so every time i buy now i have an app where i literally have to put in the purchase, making me more aware of how im spending money yknow? 
