@@ -520,10 +520,10 @@ public class MainActivity extends AppCompatActivity {
         // [NOTE / FOR LATER] Currently hardcoded, later on prolly fix this.
 
         if (view.getId() == R.id.quickadd_busfare) {
-            current_month.appendTransaction(new Transaction("OC Transpo", 4.00, new Timestamp(), "BUSF"));
+            current_month.appendTransaction(new Transaction("OC Transpo", 4.05, new Timestamp(), "BUSF"));
         }
         else if (view.getId() == R.id.quickadd_pool) {
-            current_month.appendTransaction(new Transaction("Richcraft", 4.58, new Timestamp(), "POOL"));
+            current_month.appendTransaction(new Transaction("Richcraft", 3.11, new Timestamp(), "POOL"));
         }
 
         // [NOTE] yeah just doxxed myself didnt i --> XD

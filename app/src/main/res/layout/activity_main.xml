@@ -168,9 +168,11 @@
                                 android:backgroundTint="#FFFFFF"
                                 android:fontFamily="@font/vcr"
                                 android:onClick="quickAddTransaction"
-                                android:text="BUS $4.00"
+                                android:text="BUS $4.05"
                                 android:textColor="#555555"
-                                android:textSize="13sp"
+                                android:textSize="16sp"
+                                android:insetTop="0dp"
+                                android:insetBottom="0dp"
                                 app:cornerRadius="0dp" />
                         </LinearLayout>
 
@@ -190,9 +192,11 @@
                                 android:backgroundTint="#FFFFFF"
                                 android:fontFamily="@font/vcr"
                                 android:onClick="quickAddTransaction"
-                                android:text="POOL $4.58"
+                                android:text="POOL $3.11"
                                 android:textColor="#555555"
-                                android:textSize="13sp"
+                                android:textSize="16sp"
+                                android:insetTop="0dp"
+                                android:insetBottom="0dp"
                                 app:cornerRadius="0dp" />
                         </LinearLayout>
                     </LinearLayout>
